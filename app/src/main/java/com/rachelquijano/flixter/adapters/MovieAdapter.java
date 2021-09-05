@@ -3,7 +3,10 @@ package com.rachelquijano.flixter.adapters;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.text.Layout;
+import android.text.method.MovementMethod;
+import android.text.method.ScrollingMovementMethod;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,7 +21,7 @@ import com.rachelquijano.flixter.models.Movie;
 
 import java.util.List;
 
-public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder>  {
+public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> implements View.OnTouchListener {
 
     Context context;
     List<Movie> movies;
@@ -43,12 +46,22 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         Movie movie = movies.get(position);
         //Bind the movie data into the VH
         holder.bind(movie);
+
+        holder.tvOverview.setOnTouchListener(this);
+        holder.tvOverview.setMovementMethod(ScrollingMovementMethod.getInstance());
+
     }
 
     //Returns the total count of items in the list
     @Override
     public int getItemCount() {
         return movies.size();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        view.getParent().requestDisallowInterceptTouchEvent(true);
+        return false;
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
