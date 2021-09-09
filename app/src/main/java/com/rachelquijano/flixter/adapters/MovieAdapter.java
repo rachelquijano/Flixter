@@ -1,6 +1,7 @@
 package com.rachelquijano.flixter.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.text.Layout;
 import android.text.method.MovementMethod;
@@ -10,14 +11,19 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.rachelquijano.flixter.DetailActivity;
 import com.rachelquijano.flixter.R;
 import com.rachelquijano.flixter.models.Movie;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -70,6 +76,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
         TextView tvOverview;
         TextView tvReleaseDate;
         ImageView ivPoster;
+        RelativeLayout container;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -78,6 +85,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
             tvOverview = itemView.findViewById(R.id.tvOverview);
             ivPoster = itemView.findViewById(R.id.ivPoster);
             tvReleaseDate = itemView.findViewById(R.id.tvReleaseDate);
+            container = itemView.findViewById(R.id.container);
         }
 
         public void bind(Movie movie) {
@@ -94,6 +102,16 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.ViewHolder> 
                     .load(imageUrl)
                     .placeholder(R.drawable.placeholder)
                     .into(ivPoster);
+
+            container.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(context, movie.getTitle(), Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(context, DetailActivity.class);
+                    i.putExtra("movie", Parcels.wrap(movie));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }
